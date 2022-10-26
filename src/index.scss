@@ -1,0 +1,114 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Card";
+  src: local("Card"),
+    url("./fonts/Card.ttf") format('truetype');
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: Card;
+  -webkit-backface-visibility: hidden;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+// ###################################################################
+$d: 20vw;
+$n: 52;
+$ba: calc(360deg / $n);
+
+.flip-card{
+  position: absolute;
+  top: 50%;
+  margin: (calc(50vw - 2.5em)) 0 0 (calc(50vw - 2.5em));
+  width: $d; height: calc($d * 1.4);
+  font-size: calc($d * .175);
+  text-align: center;
+  // box-shadow: 0 1px 6px rgba(38, 38, 38, 0.12), 0 1px 4px rgba(38, 38, 38, 0.24);
+
+  @for $i from 1 to $n {
+    &:nth-child(#{$i + 1}) {
+      --a: #{$i * $ba};
+      --b: #{$i * $ba * -1};
+    } 
+  }
+}
+
+.flip-card:not(#A-spades) {
+  animation: fan 8s infinite ;
+}
+
+@keyframes fan {
+  0% {
+    transform: rotate(0) translate(0);
+    box-shadow: none;
+  }
+  25% {
+    transform: rotate(var(--a, 0deg)) translate(7.5em);
+    box-shadow: initial;
+  }
+  50% {
+    transform: rotate(0) translate(0);
+    box-shadow: none;
+  }
+  75% {
+    transform: rotate(var(--b, 0deg)) translate(-7.5em);
+    box-shadow: initial;
+  }
+  100% {
+    transform: rotate(0) translate(0);
+    box-shadow: none;
+  }
+}
+
+@keyframes fade {
+  0%{
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+// ###################################################################
+
+#A-spades {
+  @apply top-[40%] left-[40%] m-0 p-0;
+  transition: transform 0.8s;
+}
+
+#A-spades:hover .flip-card-inner {
+  transform: rotateY(180deg);
+  transform-style: preserve-3d;
+}
+
+.flip-card-inner {
+  @apply bg-white rounded-lg relative border-[1px] border-[#282828];
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+}
+
+.flip-card-back {
+  transform: rotateY(180deg);
+}
